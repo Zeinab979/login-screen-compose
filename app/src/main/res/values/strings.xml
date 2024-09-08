@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Login Page</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="create_your_profile">Create your personal profile.com and follow.</string>
+    <string name="password">password</string>
+    <string name="email">Email</string>
+    <string name="city">City</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="login">Login</string>
+    <string name="already_have_an_account">Already have an account? </string>
+    <string name="by_signing_up_you_agree_to_the">By signing up, you agree to the</string>
+    <string name="details">Aspen is as close as one can get to a storybook alpine town in America. The choose-your-own-adventure possibilities—skiing, hiking, dining shopping and  Aspen is as close as one can get to a storybook alpine town in America. The choose-your-own-adventure possibilities—skiing, hiking, dining shopping and  Aspen is as close as one can get to a storybook alpine town in America. The choose-your-own-adventure possibilities—skiing, hiking, dining shopping and  Aspen is as close as one can get to a storybook alpine town in America. The choose-your-own-adventure possibilities—skiing, hiking, dining shopping and ........</string>
+    <string name="coeurdes_alpes">"Coeurdes Alpes "</string>
+    <string name="popular_cities">Popular Cities</string>
+    <string name="don_t_have_an_account_yet">"Don’t have an account yet? "</string>
+    <string name="enter_to_your_personal_profile_com_and_follow">Enter to your personal profile.com and follow.</string>
+    <string name="terms_of_service_and_privacy_policy">" Terms of Service and Privacy Policy"</string>
+    <string name="_355_reviews">      355 Reviews</string>
+    <string name="explore">Explore</string>
+    <string name="plan_your">Plan your</string>
+    <string name="luxurious_vacation">Luxurious\n\nVacation</string>
+    <string name="aspen">Aspen</string>
+    <string name="refresh">Refresh</string>
+    <string name="coming_soon">Coming Soon</string>
 </resources>
