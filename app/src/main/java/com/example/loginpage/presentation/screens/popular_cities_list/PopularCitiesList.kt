@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.loginpage.R
 import com.example.loginpage.data.popularCities
-import com.example.loginpage.presentation.ComingSoon
+import com.example.loginpage.presentation.screens.ComingSoon
 import com.example.loginpage.presentation.theme.LoginPageTheme
 
 @Composable
@@ -59,7 +59,8 @@ fun PopularCitiesList(
          }
      }}
         else{
-            ComingSoon()}
+            ComingSoon()
+        }
     }
 }
 @Preview(showBackground = true)
