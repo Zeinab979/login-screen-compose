@@ -58,7 +58,6 @@ fun AppNavHost(
             val index = backStackEntry.arguments?.getInt("index") ?: -1
             Log.d("NavHost", "CityDetails received index: $index")
 
-            // Ensure we fetch the correct city from the list
             if (index in popularCities.indices) {
                 val city = popularCities[index]
                 Log.d("NavHost", "CityDetails displaying: ${city.cityName}")
@@ -68,9 +67,7 @@ fun AppNavHost(
                     onBackClick = { navController.navigateUp() }
                 )
             } else {
-                // Handle invalid index
                 Log.e("NavHost", "Invalid city index: $index")
-                Text(text = "City not found", modifier = Modifier.fillMaxSize())
             }
         }
 

@@ -1,5 +1,6 @@
 package com.example.loginpage.presentation.screens.coming_soon_details
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,6 +40,8 @@ fun ComingSoonDetails(
     cityDetails: PopularCitiesData,
     onBackClick: () -> Unit,
 ) {
+    Log.d("CityDetails", "Displaying city: ${stringResource(id = cityDetails.cityName)}")
+
     Scaffold(
         topBar = {
             ScreenAppBar(
@@ -61,7 +64,7 @@ fun ComingSoonDetails(
         ) {
             Image(
                 bitmap = ImageBitmap.imageResource(cityDetails.cityImage),
-                contentDescription = "city",
+                contentDescription = stringResource(cityDetails.cityName),
                 modifier = Modifier
                     .height(267.dp)
                     .fillMaxWidth()
