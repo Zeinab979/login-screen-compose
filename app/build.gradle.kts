@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.25"
+    id("org.jetbrains.kotlin.kapt")
+    id("com.google.dagger.hilt.android")
+
 }
 
 android {
@@ -40,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
@@ -48,7 +52,6 @@ android {
         }
     }
 }
-
 dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
@@ -66,4 +69,42 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+// Hilt Dependencies
+    implementation(libs.hilt.android)
+    kapt(libs.dagger.hilt.android.compiler.v252)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+// Retrofit and OkHttp
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.retrofit2.kotlinx.serialization.converter) // Ensure it's correctly resolving
+
+// Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.jetbrains.kotlinx.coroutines.core)
+
+    //Hilt
+    implementation(libs.androidx.hilt.navigation.compose) // Add this for hiltViewModel()
+    implementation(libs.hilt.android)
+    kapt(libs.dagger.hilt.android.compiler.v252)
+    kapt(libs.androidx.hilt.compiler)
+
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.okhttp)
+    // retrofit
+    implementation(libs.retrofit)
+    // OkHttp and Logging Interceptor
+    implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
+    // GSON
+    implementation(libs.converter.gson)
+    // coroutine
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.jetbrains.kotlinx.coroutines.core)
+
+}
+kapt {
+    correctErrorTypes = true
 }

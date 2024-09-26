@@ -19,35 +19,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.loginpage.R
 import com.example.loginpage.data.popularCities
-import com.example.loginpage.presentation.screens.ComingSoon
 import com.example.loginpage.presentation.theme.LoginPageTheme
 
 @Composable
 fun PopularCitiesList(
     onItemClicked : (Int) -> Unit
 ) {
-    Column (
-        horizontalAlignment = Alignment.Start,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 14.dp),
 
-    ){
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "logo",
-            modifier = Modifier
-                .padding(horizontal = 117.dp, vertical = 34.dp)
-                .size(135.dp, 116.dp)
-
-        )
-        Text(
-            text = stringResource(id = R.string.popular_cities),
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding( bottom = 19.dp)
-        )
-        if (popularCities.size != null){
      LazyColumn {
+         item { Column (
+             horizontalAlignment = Alignment.Start,
+             modifier = Modifier
+                 .fillMaxSize()
+                 .padding(start = 14.dp),
+
+             ){
+             Image(
+                 painter = painterResource(id = R.drawable.logo),
+                 contentDescription = "logo",
+                 modifier = Modifier
+                     .padding(horizontal = 117.dp, vertical = 34.dp)
+                     .size(135.dp, 116.dp)
+
+             )
+             Text(
+                 text = stringResource(id = R.string.popular_cities),
+                 style = MaterialTheme.typography.headlineMedium,
+                 modifier = Modifier.padding( bottom = 19.dp)
+             )} }
          itemsIndexed(popularCities) { index , item ->
              ItemDetails(
                  uiState = item,
@@ -57,11 +56,8 @@ fun PopularCitiesList(
                  }
              )
          }
-     }}
-        else{
-            ComingSoon()
-        }
-    }
+     }
+
 }
 @Preview(showBackground = true)
 @Composable

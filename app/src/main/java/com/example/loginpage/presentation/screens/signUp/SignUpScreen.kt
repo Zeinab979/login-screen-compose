@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
@@ -32,27 +34,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.loginpage.R
 import com.example.loginpage.presentation.screens.commonComponent.MyButton
 import com.example.loginpage.presentation.screens.commonComponent.MyTextField
-import com.example.loginpage.presentation.theme.LoginPageTheme
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    navigateTo : ()->Unit
+    onSignUpSuccess: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var showDialog by remember { mutableStateOf<String?>(null) }
+
+    if (showDialog != null) {
+        SignUpResultDialog(message = showDialog!!) {
+            showDialog = null
+        }
+    }
+
     Column(
-        verticalArrangement = Arrangement.spacedBy(17.dp),
-        horizontalAlignment = Alignment.Start,
         modifier = modifier
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 18.dp)
-            .fillMaxSize()
-
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(17.dp),
+        horizontalAlignment = Alignment.Start
     ) {
         Image(
             painter = painterResource(id = R.drawable.logo),
@@ -61,15 +73,15 @@ fun SignUpScreen(
                 .padding(horizontal = 117.dp)
                 .size(110.dp)
         )
+
         Text(
             text = buildAnnotatedString {
                 withStyle(
                     style = SpanStyle(
                         fontFamily = FontFamily.Default,
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 37.sp,
+                        fontSize = 37.sp
                     )
-
                 ) {
                     append(stringResource(R.string.sign_up) + "\n")
                 }
@@ -77,66 +89,39 @@ fun SignUpScreen(
                     style = SpanStyle(
                         fontFamily = FontFamily.Default,
                         fontWeight = FontWeight.Light,
-                        fontSize = 16.sp,
-
-                        )
+                        fontSize = 16.sp
+                    )
                 ) {
                     append(stringResource(R.string.create_your_profile))
                 }
+            }
+        )
 
-            },
-        )
-        var phoneNumber by remember {
-            mutableStateOf("")
-        }
         MyTextField(
-            value = phoneNumber,
-            onValueChange = { newPhoneNumber ->
-                phoneNumber = newPhoneNumber
-            },
-            label = R.string.phone_number,
-            placeholder = R.string.phone_number,
-            keyBoardType = KeyboardType.Number,
-        )
-        var email by remember {
-            mutableStateOf("")
-        }
-        MyTextField(
-            value = email,
-            onValueChange = { newEmail ->
-                email = newEmail
-            },
+            value = uiState.email,
+            onValueChange = { viewModel.updateEmail(it) },
             label = R.string.email,
             placeholder = R.string.email,
-            keyBoardType = KeyboardType.Email,
+            keyBoardType = KeyboardType.Email
         )
-        var city by remember {
-            mutableStateOf("")
-        }
+
         MyTextField(
-            value = city,
-            onValueChange = { newCity ->
-                city = newCity
-            },
+            value = uiState.name,
+            onValueChange = { viewModel.updateName(it) },
             label = R.string.city,
             placeholder = R.string.city,
-            keyBoardType = KeyboardType.Text,
+            keyBoardType = KeyboardType.Text
         )
-        var password by remember {
-            mutableStateOf("")
-        }
+
         MyTextField(
-            value = password,
-            onValueChange = { newPassword ->
-                password = newPassword
-            },
+            value = uiState.password,
+            onValueChange = { viewModel.updatePassword(it) },
             label = R.string.password,
             placeholder = R.string.password,
-            keyBoardType = KeyboardType.Password,
+            keyBoardType = KeyboardType.Password
         )
-        var checked by remember {
-            mutableStateOf(false)
-        }
+
+        var checked by remember { mutableStateOf(false) }
         Row(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -147,87 +132,92 @@ fun SignUpScreen(
                 onCheckedChange = { checked = it },
                 colors = CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colorScheme.primary,
-                    uncheckedColor = MaterialTheme.colorScheme.primary,
+                    uncheckedColor = MaterialTheme.colorScheme.primary
                 ),
                 modifier = Modifier
                     .height(24.dp)
                     .width(26.dp)
             )
+
             Text(
                 text = buildAnnotatedString {
-
                     withStyle(
                         style = SpanStyle(
                             fontFamily = FontFamily.Default,
                             fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp,
+                            fontSize = 14.sp
                         )
-
                     ) {
                         append(stringResource(id = R.string.by_signing_up_you_agree_to_the))
-
                     }
                     withStyle(
                         style = SpanStyle(
                             fontFamily = FontFamily.Default,
                             fontWeight = FontWeight.Medium,
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.primary,
-
-                            )
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     ) {
                         append(stringResource(id = R.string.terms_of_service_and_privacy_policy))
                     }
-
                 },
                 modifier = Modifier.clickable {
-
                 }
             )
-
         }
-        MyButton(
-            onClick = { },
-            text = R.string.sign_up,
-        )
-        Text(text = buildAnnotatedString {
-            withStyle(
-               style = SpanStyle(
-                   fontFamily = FontFamily.Default,
-                   fontWeight = FontWeight.Medium,
-                   fontSize = 16.sp,
-                   color = MaterialTheme.colorScheme.onSecondary
-               )
-            ){
-              append(stringResource(id = R.string.already_have_an_account))
-            }
-            withStyle(
-                style = SpanStyle(
-                    fontFamily = FontFamily.Default,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    textDecoration = TextDecoration.Underline
-                )
-            ){
-                append(stringResource(id = R.string.login))
-            }
 
-        },
+        MyButton(
+            onClick = {
+                if ( uiState.password.length >= 6) {
+                    viewModel.signUp()
+                } else {
+                    showDialog = stringResource(R.string.password_length_message)
+                }
+            },
+            text = R.string.sign_up
+        )
+
+        Text(
+            text = buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        fontFamily = FontFamily.Default,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                ) {
+                    append(stringResource(id = R.string.already_have_an_account))
+                }
+                withStyle(
+                    style = SpanStyle(
+                        fontFamily = FontFamily.Default,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                ) {
+                    append(stringResource(id = R.string.login))
+                }
+            },
             modifier = Modifier
                 .padding(horizontal = 50.dp)
-                .clickable { navigateTo()}
+                .clickable { onNavigateToLogin() }
         )
     }
-
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun SignUpScreenPreview() {
-    LoginPageTheme {
-        SignUpScreen(
-        ){}
-    }
-
+fun SignUpResultDialog(message: String, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Sign Up Result") },
+        text = { Text(message) },
+        confirmButton = {
+            Button(onClick = onDismiss) {
+                Text("OK")
+            }
+        }
+    )
 }

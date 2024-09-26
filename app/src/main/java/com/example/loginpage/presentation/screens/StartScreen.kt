@@ -29,7 +29,7 @@ import com.example.loginpage.presentation.screens.commonComponent.MyButton
 import com.example.loginpage.presentation.theme.LoginPageTheme
 
 @Composable
-fun SplashScreen(
+fun StartScreen(
     navigateTo: () -> Unit,
 ) {
     Box(
@@ -95,6 +95,6 @@ fun SplashScreen(
 @Composable
 private fun SplashScreenPreview() {
     LoginPageTheme {
-        SplashScreen() {}
+        StartScreen() {}
     }
 }
