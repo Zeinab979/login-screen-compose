@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.25"
+    kotlin("plugin.serialization")
     id("org.jetbrains.kotlin.kapt")
     id("com.google.dagger.hilt.android")
 
@@ -44,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
@@ -69,10 +69,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-// Hilt Dependencies
-    implementation(libs.hilt.android)
-    kapt(libs.dagger.hilt.android.compiler.v252)
-    implementation(libs.androidx.hilt.navigation.compose)
 
 // Retrofit and OkHttp
     implementation(libs.retrofit)
@@ -81,7 +77,7 @@ dependencies {
 
 // Coroutines
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.jetbrains.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.core)
 
     //Hilt
     implementation(libs.androidx.hilt.navigation.compose) // Add this for hiltViewModel()
@@ -90,19 +86,19 @@ dependencies {
     kapt(libs.androidx.hilt.compiler)
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+   // implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    // Kotlinx Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.okhttp)
-    // retrofit
-    implementation(libs.retrofit)
+
     // OkHttp and Logging Interceptor
     implementation (libs.okhttp)
     implementation (libs.logging.interceptor)
     // GSON
     implementation(libs.converter.gson)
-    // coroutine
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.jetbrains.kotlinx.coroutines.core)
 
 }
 kapt {
