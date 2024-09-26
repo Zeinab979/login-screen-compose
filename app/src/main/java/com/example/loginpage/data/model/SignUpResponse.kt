@@ -1,13 +1,15 @@
 package com.example.loginpage.data.model
 
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class SignUpResponse(
     val status: Boolean,
     val message: String,
-    val data: SignUpData
+    @SerialName("data")
+    val `data`: SignUpData
 )
 @Serializable
 data class SignUpData(
