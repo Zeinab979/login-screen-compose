@@ -2,8 +2,14 @@ package com.example.loginpage.di
 
 import com.example.loginpage.data.data_source.ApiService
 import com.example.loginpage.data.repository.AuthRepositoryImpl
+import com.example.loginpage.data.repository.RestaurantsRepositoryImpl
 import com.example.loginpage.domain.repository.AuthRepository
+import com.example.loginpage.domain.repository.RestaurantsRepository
+import com.example.loginpage.domain.usecase.AuthUseCase
+import com.example.loginpage.domain.usecase.ListRestaurantsUseCase
 import com.example.loginpage.domain.usecase.LoginUseCase
+import com.example.loginpage.domain.usecase.RestaurantDetailsUseCase
+import com.example.loginpage.domain.usecase.RestaurantUseCase
 import com.example.loginpage.domain.usecase.SignUpUseCase
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -15,9 +21,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-import java.util.concurrent.TimeUnit
 
 
 
@@ -55,13 +59,23 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideLoginUseCase(authRepository: AuthRepository): LoginUseCase {
-        return LoginUseCase(authRepository)
+    fun provideAuthUseCase(authRepository: AuthRepository): AuthUseCase = AuthUseCase(
+        loginUseCase = LoginUseCase(authRepository),
+        signUpUseCase = SignUpUseCase(authRepository)
+    )
+
+    @Provides
+    @Singleton
+    fun provideRestaurantsRepository(apiService: ApiService) : RestaurantsRepository{
+        return RestaurantsRepositoryImpl(apiService)
     }
 
     @Provides
     @Singleton
-    fun provideSignUpUseCase(authRepository: AuthRepository): SignUpUseCase {
-        return SignUpUseCase(authRepository)
-    }
+    fun provideRestaurantsUseCase(restaurantsRepository: RestaurantsRepository): RestaurantUseCase=
+        RestaurantUseCase(
+            listRestaurantsUseCase = ListRestaurantsUseCase(restaurantsRepository),
+            restaurantDetailsUseCase = RestaurantDetailsUseCase(restaurantsRepository)
+        )
+
 }
