@@ -25,7 +25,6 @@ class LoginViewModel @Inject constructor(
 
     private val _loginState: MutableStateFlow<DataState<LoginResponse>> =
         MutableStateFlow(DataState.Idle)
-    val loginState: StateFlow<DataState<LoginResponse>> = _loginState
 
     fun updatePassword(newPassword: String) {
         _uiState.value = _uiState.value.copy(password = newPassword)
@@ -37,10 +36,7 @@ class LoginViewModel @Inject constructor(
 
     fun login() {
         viewModelScope.launch(IO) {
-            withContext(Main) {
                 _uiState.value = _uiState.value.copy(loginState = DataState.Loading)
-            }
-
             loginUseCase(_uiState.value.email, _uiState.value.password).collect { response ->
                 _loginState.value = response
                 when (response) {
@@ -57,8 +53,10 @@ class LoginViewModel @Inject constructor(
                         Log.d("LoginViewModel", "Login Failed: ${response.message}")
                     }
                     is DataState.Loading -> {
+                        Log.d("LoginViewModel", "Loading")
                     }
                     is DataState.Idle -> {
+                        Log.d("LoginViewModel", "Idle")
                     }
                 }
             }

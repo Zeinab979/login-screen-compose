@@ -37,9 +37,7 @@ class SignUpViewModel @Inject constructor(
 
     fun signUp() {
         viewModelScope.launch(IO) {
-            withContext(Main) {
                 _uiState.value = _uiState.value.copy(signUpState = DataState.Loading)
-            }
 
             signUpUseCase(
                 _uiState.value.name,

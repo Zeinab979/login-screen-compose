@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.io.IOException
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -34,7 +35,10 @@ class AuthRepositoryImpl @Inject constructor(
                 Log.e("AuthRepository", errorMessage)
                 emit(DataState.Error(errorMessage))
             }
-        } catch (e: Exception) {
+        } catch (e: IOException) {
+            emit(DataState.Error("Network error: ${e.localizedMessage ?: "Check your connection"}"))
+
+    } catch (e: Exception) {
             Log.e("AuthRepository", "Sign up failed: ${e.localizedMessage ?: e.message}")
             emit(DataState.Error("Sign up failed: ${e.localizedMessage ?: e.message}"))
         }
@@ -58,7 +62,11 @@ class AuthRepositoryImpl @Inject constructor(
                 Log.e("AuthRepository", errorMessage)
                 emit(DataState.Error(errorMessage))
             }
-        } catch (e: Exception) {
+        }
+        catch (e: IOException) {
+            emit(DataState.Error("Network error: ${e.localizedMessage ?: "Check your connection"}"))
+        }
+        catch (e: Exception) {
             Log.e("AuthRepository", "Login failed: ${e.localizedMessage ?: e.message}")
             emit(DataState.Error("Login failed: ${e.localizedMessage ?: e.message}"))
         }
