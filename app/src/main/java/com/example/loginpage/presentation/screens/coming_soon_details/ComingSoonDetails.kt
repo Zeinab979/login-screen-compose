@@ -1,6 +1,5 @@
 package com.example.loginpage.presentation.screens.coming_soon_details
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,19 +27,17 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.loginpage.R
-import com.example.loginpage.data.PopularCitiesData
-import com.example.loginpage.presentation.theme.LoginPageTheme
+import com.example.loginpage.data.model.Product
+import com.example.loginpage.util.DataState
 
 @Composable
 fun ComingSoonDetails(
-    cityDetails: PopularCitiesData,
+    productDetails: DataState<Product>,
     onBackClick: () -> Unit,
 ) {
-    Log.d("CityDetails", "Displaying city: ${stringResource(id = cityDetails.cityName)}")
 
     Scaffold(
         topBar = {
@@ -53,65 +50,73 @@ fun ComingSoonDetails(
             .padding(start = 27.dp, end = 27.dp)
 
     ) {
+        when (productDetails) {
+            is DataState.Loading -> {
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-                .height(180.dp)
+            }
 
-        ) {
-            Image(
-                bitmap = ImageBitmap.imageResource(cityDetails.cityImage),
-                contentDescription = stringResource(cityDetails.cityName),
-                modifier = Modifier
-                    .height(267.dp)
-                    .fillMaxWidth()
-            )
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 24.sp,
-                        )
+            is DataState.Success -> {
+                val product = productDetails.data
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it)
+                        .height(180.dp)
 
-                    ) {
-                        append(stringResource(cityDetails.cityName))
-                    }
-                    withStyle(
-                        style = SpanStyle(
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        append("          " + stringResource(cityDetails.review))
-                    }
-                },
-                modifier = Modifier
-                    .padding(start = 15.dp, top = 28.dp, bottom = 28.dp)
-                    .fillMaxWidth()
-            )
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(
-                            fontSize = 14.sp,
-                        )
-                    ) {
-                        append(stringResource(cityDetails.details))
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
+                ) {
+                    Image(
+                        bitmap = ImageBitmap.imageResource(product.image.toInt()),
+                        contentDescription = stringResource(product.name.toInt()),
+                        modifier = Modifier
+                            .height(267.dp)
+                            .fillMaxWidth()
+                    )
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 24.sp,
+                                )
+
+                            ) {
+                                append(stringResource(product.name.toInt()))
+                            }
+                            withStyle(
+                                style = SpanStyle(
+                                    fontSize = 14.sp,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            ) {
+                                append("          " + stringResource(product.quantity))
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(start = 15.dp, top = 28.dp, bottom = 28.dp)
+                            .fillMaxWidth()
+                    )
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    fontSize = 14.sp,
+                                )
+                            ) {
+                                append(stringResource(product.price))
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
 
 
-        }
+                }
+            }
+        is DataState.Error -> {}
+        else -> {}
     }
-}
-
+}}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenAppBar(
@@ -144,17 +149,3 @@ fun ScreenAppBar(
 
 }
 
-@Preview
-@Composable
-private fun ComingSoonItemPreview() {
-    LoginPageTheme {
-        ComingSoonDetails(
-            cityDetails = PopularCitiesData(
-                cityImage = R.drawable.city,
-                cityName = R.string.coeurdes_alpes,
-                review = R.string._355_reviews,
-                details = R.string.details
-            )
-        ) {}
-    }
-}

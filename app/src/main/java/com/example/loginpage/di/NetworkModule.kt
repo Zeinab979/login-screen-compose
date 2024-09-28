@@ -5,12 +5,7 @@ import com.example.loginpage.data.repository.AuthRepositoryImpl
 import com.example.loginpage.data.repository.RestaurantsRepositoryImpl
 import com.example.loginpage.domain.repository.AuthRepository
 import com.example.loginpage.domain.repository.RestaurantsRepository
-import com.example.loginpage.domain.usecase.AuthUseCase
-import com.example.loginpage.domain.usecase.ListRestaurantsUseCase
-import com.example.loginpage.domain.usecase.LoginUseCase
-import com.example.loginpage.domain.usecase.RestaurantDetailsUseCase
-import com.example.loginpage.domain.usecase.RestaurantUseCase
-import com.example.loginpage.domain.usecase.SignUpUseCase
+import com.example.loginpage.domain.usecase.*
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -23,11 +18,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-
-
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object AppModule {
 
     @Provides
     @Singleton
@@ -48,7 +41,7 @@ object NetworkModule {
             .client(okHttpClient)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
-             .create(ApiService::class.java)
+            .create(ApiService::class.java)
     }
 
     @Provides
@@ -56,26 +49,51 @@ object NetworkModule {
     fun provideAuthRepository(apiService: ApiService): AuthRepository {
         return AuthRepositoryImpl(apiService)
     }
+    @Provides
+    @Singleton
+    fun provideLoginUseCase(authRepository: AuthRepository): LoginUseCase {
+        return LoginUseCase(authRepository)
+    }
 
     @Provides
     @Singleton
-    fun provideAuthUseCase(authRepository: AuthRepository): AuthUseCase = AuthUseCase(
-        loginUseCase = LoginUseCase(authRepository),
-        signUpUseCase = SignUpUseCase(authRepository)
-    )
+    fun provideSignUpUseCase(authRepository: AuthRepository): SignUpUseCase {
+        return SignUpUseCase(authRepository)
+    }
 
     @Provides
     @Singleton
-    fun provideRestaurantsRepository(apiService: ApiService) : RestaurantsRepository{
+    fun provideAuthUseCase(
+        loginUseCase: LoginUseCase,
+        signUpUseCase: SignUpUseCase
+    ): AuthUseCase {
+        return AuthUseCase(loginUseCase, signUpUseCase)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRestaurantsRepository(apiService: ApiService): RestaurantsRepository {
         return RestaurantsRepositoryImpl(apiService)
     }
 
     @Provides
     @Singleton
-    fun provideRestaurantsUseCase(restaurantsRepository: RestaurantsRepository): RestaurantUseCase=
-        RestaurantUseCase(
-            listRestaurantsUseCase = ListRestaurantsUseCase(restaurantsRepository),
-            restaurantDetailsUseCase = RestaurantDetailsUseCase(restaurantsRepository)
-        )
+    fun provideListRestaurantsUseCase(restaurantsRepository: RestaurantsRepository): ListRestaurantsUseCase {
+        return ListRestaurantsUseCase(restaurantsRepository)
+    }
 
+    @Provides
+    @Singleton
+    fun provideRestaurantDetailsUseCase(restaurantsRepository: RestaurantsRepository): RestaurantDetailsUseCase {
+        return RestaurantDetailsUseCase(restaurantsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRestaurantUseCase(
+        listRestaurantsUseCase: ListRestaurantsUseCase,
+        restaurantDetailsUseCase: RestaurantDetailsUseCase
+    ): RestaurantUseCase {
+        return RestaurantUseCase(listRestaurantsUseCase, restaurantDetailsUseCase)
+    }
 }

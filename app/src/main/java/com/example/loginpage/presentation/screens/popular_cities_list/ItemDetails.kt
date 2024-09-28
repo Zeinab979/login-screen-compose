@@ -21,16 +21,13 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.loginpage.R
-import com.example.loginpage.data.PopularCitiesData
-import com.example.loginpage.presentation.theme.LoginPageTheme
+import com.example.loginpage.data.model.Product
 
 @Composable
 fun ItemDetails(
-    uiState: PopularCitiesData,
+    uiState: Product,
     onItemClicked: () -> Unit,
 ) {
     Row(
@@ -45,7 +42,7 @@ fun ItemDetails(
     ) {
 
         Image(
-            bitmap = ImageBitmap.imageResource(uiState.cityImage),
+            bitmap = ImageBitmap.imageResource(uiState.image.toInt()),
             contentDescription = "city",
             modifier = Modifier
                 .size(210.dp, 177.dp)
@@ -66,7 +63,7 @@ fun ItemDetails(
                     )
 
                 ) {
-                    append(stringResource(uiState.cityName) + "\n")
+                    append(stringResource(uiState.name.toInt()) + "\n")
                 }
                 withStyle(
                     style = SpanStyle(
@@ -74,25 +71,10 @@ fun ItemDetails(
                         color = MaterialTheme.colorScheme.primary
                     )
                 ) {
-                    append("        " + stringResource(uiState.review))
+                    append("        " + stringResource(uiState.quantity))
                 }
             },
             modifier = Modifier.padding(start = 15.dp)
         )
-    }
-}
-
-@Preview
-@Composable
-private fun ComingSoonItemPreview() {
-    LoginPageTheme {
-        ItemDetails(
-            uiState = PopularCitiesData(
-                cityImage = R.drawable.city,
-                cityName = R.string.coeurdes_alpes,
-                review = R.string._355_reviews,
-                details = R.string.details
-            )
-        ) {}
     }
 }

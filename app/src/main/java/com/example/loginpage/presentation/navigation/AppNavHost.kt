@@ -4,17 +4,19 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.loginpage.data.popularCities
 import com.example.loginpage.presentation.screens.StartScreen
 import com.example.loginpage.presentation.screens.coming_soon_details.ComingSoonDetails
+import com.example.loginpage.presentation.screens.coming_soon_details.RestaurantDetailsViewModel
 import com.example.loginpage.presentation.screens.login.LoginScreen
 import com.example.loginpage.presentation.screens.login.LoginViewModel
 import com.example.loginpage.presentation.screens.popular_cities_list.PopularCitiesList
+import com.example.loginpage.presentation.screens.popular_cities_list.RestaurantsListViewModel
 import com.example.loginpage.presentation.screens.signUp.SignUpScreen
 import com.example.loginpage.presentation.screens.signUp.SignUpViewModel
 
@@ -57,33 +59,32 @@ fun AppNavHost(
             )
         }
         composable(NavigationItem.PopularCitiesList.route) {
+            val restaurantsListViewModel : RestaurantsListViewModel = hiltViewModel()
             PopularCitiesList(
-                onItemClicked = { index ->
-                    Log.d("PopularCitiesListIndex", "Navigating to CityDetails with index: $index")
-                    navController.navigate("${NavigationItem.CityDetails.route}/$index")
+                uiState = restaurantsListViewModel.listState,
+                onItemClicked = { productId ->
+                    navController.navigate("${NavigationItem.CityDetails.route}/$productId")
                 }
             )
         }
         composable(
-            route = "${NavigationItem.CityDetails.route}/{index}",
-            arguments = listOf(navArgument("index") { NavType.IntType })
+            route = "${NavigationItem.CityDetails.route}/{productId}",
+            arguments = listOf(navArgument("productId") { NavType.IntType })
         ) { backStackEntry ->
-            val index = backStackEntry.arguments?.getInt("index") ?: -1
-            Log.d("NavHost", "CityDetails received index: $index")
+            val productId = backStackEntry.arguments?.getInt("productId") ?: -1
+            Log.d("NavHost", "CityDetails received index: $productId")
 
-            if (index in popularCities.indices) {
-                val city = popularCities[index]
-                Log.d("NavHost", "CityDetails displaying: ${city.cityName}")
+            if (productId != -1) {
+                val detailsViewModel : RestaurantDetailsViewModel = hiltViewModel()
+                detailsViewModel.fetchRestaurantDetails(productId)
+                val productDetails = detailsViewModel.restaurantDetails.collectAsStateWithLifecycle().value
 
                 ComingSoonDetails(
-                    cityDetails = city,
-                    onBackClick = {navController.navigate(NavigationItem.PopularCitiesList.route) {
-                        popUpTo(NavigationItem.SignUp.route) { inclusive = true }
-                    }
-                    }
+                    productDetails = productDetails,
+                    onBackClick = { navController.navigateUp()}
                 )
             } else {
-                Log.e("NavHost", "Invalid city index: $index")
+                Log.e("NavHost", "Invalid city index: $productId")
             }
         }
 

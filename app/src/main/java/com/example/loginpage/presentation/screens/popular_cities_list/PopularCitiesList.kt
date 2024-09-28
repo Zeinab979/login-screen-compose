@@ -15,15 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.loginpage.R
-import com.example.loginpage.data.popularCities
-import com.example.loginpage.presentation.theme.LoginPageTheme
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun PopularCitiesList(
-    onItemClicked : (Int) -> Unit
+    onItemClicked : (Int) -> Unit,
+    uiState : StateFlow<RestaurantsListUiState>
 ) {
 
      LazyColumn {
@@ -47,7 +46,7 @@ fun PopularCitiesList(
                  style = MaterialTheme.typography.headlineMedium,
                  modifier = Modifier.padding( bottom = 19.dp)
              )} }
-         itemsIndexed(popularCities) { index , item ->
+         itemsIndexed(uiState.value.products) { index , item ->
              ItemDetails(
                  uiState = item,
                  onItemClicked = {
@@ -59,10 +58,10 @@ fun PopularCitiesList(
      }
 
 }
-@Preview(showBackground = true)
-@Composable
-private fun ComingSoonListPreview() {
-    LoginPageTheme {
-        PopularCitiesList(onItemClicked = {})
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun ComingSoonListPreview() {
+//    LoginPageTheme {
+//        PopularCitiesList(onItemClicked = {})
+//    }
+//}
