@@ -99,6 +99,9 @@ dependencies {
     implementation (libs.logging.interceptor)
     // GSON
     implementation(libs.converter.gson)
+    //coil
+    implementation ("io.coil-kt:coil-compose:2.0.0")
+
 
 }
 kapt {

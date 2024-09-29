@@ -14,8 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -23,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import com.example.loginpage.R
 import com.example.loginpage.data.model.Product
 
 @Composable
@@ -42,7 +42,7 @@ fun ItemDetails(
     ) {
 
         Image(
-            bitmap = ImageBitmap.imageResource(uiState.image.toInt()),
+            painter = rememberAsyncImagePainter(model = R.drawable.city),
             contentDescription = "city",
             modifier = Modifier
                 .size(210.dp, 177.dp)

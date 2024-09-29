@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -24,6 +23,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.loginpage.R
 import com.example.loginpage.presentation.screens.commonComponent.MyButton
 import com.example.loginpage.presentation.theme.LoginPageTheme
@@ -36,7 +36,7 @@ fun StartScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.splash),
+            painter = rememberAsyncImagePainter(model = R.drawable.splash),
             contentDescription = "back ground",
             contentScale = ContentScale.FillHeight,
             modifier = Modifier.fillMaxSize()

@@ -13,9 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.loginpage.R
 import kotlinx.coroutines.flow.StateFlow
 
@@ -34,12 +34,11 @@ fun PopularCitiesList(
 
              ){
              Image(
-                 painter = painterResource(id = R.drawable.logo),
+                 painter = rememberAsyncImagePainter(model = R.drawable.logo),
                  contentDescription = "logo",
                  modifier = Modifier
                      .padding(horizontal = 117.dp, vertical = 34.dp)
                      .size(135.dp, 116.dp)
-
              )
              Text(
                  text = stringResource(id = R.string.popular_cities),
@@ -58,10 +57,3 @@ fun PopularCitiesList(
      }
 
 }
-//@Preview(showBackground = true)
-//@Composable
-//private fun ComingSoonListPreview() {
-//    LoginPageTheme {
-//        PopularCitiesList(onItemClicked = {})
-//    }
-//}
