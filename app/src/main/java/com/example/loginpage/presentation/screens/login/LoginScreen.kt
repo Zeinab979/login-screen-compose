@@ -15,6 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,25 +36,48 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.loginpage.R
+import com.example.loginpage.data.model.LoginResponse
 import com.example.loginpage.presentation.screens.commonComponent.MyButton
 import com.example.loginpage.presentation.screens.commonComponent.MyTextField
+import com.example.loginpage.util.DataState
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     onLoginSuccess: () -> Unit,
     onNavigateToSignUp: () -> Unit,
-    viewModel: LoginViewModel = hiltViewModel()
+    uiStateFlow: StateFlow<LoginUiState>,
+    loginStateFlow: StateFlow<DataState<LoginResponse>>,
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var showDialog by remember { mutableStateOf<String?>(null) }
+    val uiState by uiStateFlow.collectAsStateWithLifecycle()
+    val loginState by loginStateFlow.collectAsStateWithLifecycle()
 
+    var showDialog by remember { mutableStateOf<String?>(null) }
+    LaunchedEffect(loginState) {
+        when (loginState) {
+            is DataState.Loading -> {
+
+            }
+
+            is DataState.Success -> {
+                showDialog = "Login Successful"
+                onLoginSuccess()
+            }
+
+            is DataState.Error -> {
+                showDialog = (loginState as DataState.Error).message
+            }
+
+            else -> {}
+        }
+    }
     if (showDialog != null) {
         LoginResultDialog(message = showDialog!!) {
             showDialog = null
         }
     }
-
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.background)
@@ -114,7 +138,6 @@ fun LoginScreen(
         MyButton(
             onClick = {
                 viewModel.login()
-                onLoginSuccess()
                       },
             text = R.string.login
         )

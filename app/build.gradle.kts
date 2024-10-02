@@ -76,8 +76,9 @@ dependencies {
     implementation(libs.retrofit2.kotlinx.serialization.converter) // Ensure it's correctly resolving
 
 // Coroutines
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.core)
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
+
 
     //Hilt
     implementation(libs.androidx.hilt.navigation.compose) // Add this for hiltViewModel()

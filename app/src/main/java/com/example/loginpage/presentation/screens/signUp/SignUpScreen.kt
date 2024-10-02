@@ -19,6 +19,7 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,17 +40,23 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.loginpage.R
+import com.example.loginpage.data.model.SignUpResponse
 import com.example.loginpage.presentation.screens.commonComponent.MyButton
 import com.example.loginpage.presentation.screens.commonComponent.MyTextField
+import com.example.loginpage.util.DataState
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     onSignUpSuccess: () -> Unit,
+    uiStateFlow : StateFlow<SignUpUiState>,
     onNavigateToLogin: () -> Unit,
+    signUpStateFlow: StateFlow<DataState<SignUpResponse>>,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by uiStateFlow.collectAsStateWithLifecycle()
+    val signUpState by signUpStateFlow.collectAsStateWithLifecycle()
     var showDialog by remember { mutableStateOf<String?>(null) }
 
     if (showDialog != null) {
@@ -57,7 +64,23 @@ fun SignUpScreen(
             showDialog = null
         }
     }
+    LaunchedEffect(signUpState) {
+        when (signUpState) {
+            is DataState.Loading -> {
 
+            }
+
+            is DataState.Success -> {
+                showDialog = "Sign Up Successful"
+            }
+
+            is DataState.Error -> {
+                showDialog = (signUpState as DataState.Error).message
+            }
+
+            else -> {}
+        }
+    }
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.background)
@@ -169,7 +192,7 @@ fun SignUpScreen(
         MyButton(
             onClick = {
                 if ( uiState.password.length >= 6) {
-                    viewModel.signUp()
+                   onSignUpSuccess()
                 } else {
                     showDialog = stringResource(R.string.password_length_message)
                 }

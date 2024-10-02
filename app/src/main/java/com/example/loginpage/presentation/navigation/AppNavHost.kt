@@ -43,7 +43,9 @@ fun AppNavHost(
                 onSignUpSuccess = {
                     signUpViewModel.signUp()
                 },
-                viewModel = signUpViewModel
+                viewModel = signUpViewModel,
+                uiStateFlow = signUpViewModel.uiState,
+                signUpStateFlow = signUpViewModel.signUpState
             )
         }
         composable(NavigationItem.Login.route) {
@@ -52,10 +54,11 @@ fun AppNavHost(
                 onLoginSuccess = { navController.navigate(NavigationItem.PopularCitiesList.route) },
                 onNavigateToSignUp = {
                     navController.navigate(NavigationItem.SignUp.route) {
-                        popUpTo(NavigationItem.SignUp.route) { inclusive = true }
-                    }
+                        navController.navigateUp()                    }
                 },
-                viewModel = loginViewModel
+                viewModel = loginViewModel,
+                uiStateFlow = loginViewModel.uiState,
+                loginStateFlow = loginViewModel.loginState
             )
         }
         composable(NavigationItem.PopularCitiesList.route) {
