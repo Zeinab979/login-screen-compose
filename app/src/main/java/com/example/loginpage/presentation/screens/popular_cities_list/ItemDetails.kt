@@ -63,7 +63,7 @@ fun ItemDetails(
                     )
 
                 ) {
-                    append(stringResource(uiState.name.toInt()) + "\n")
+                    append(uiState.name + "\n")
                 }
                 withStyle(
                     style = SpanStyle(
