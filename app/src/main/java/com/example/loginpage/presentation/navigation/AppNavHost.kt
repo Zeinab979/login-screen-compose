@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.loginpage.presentation.screens.StartScreen
 import com.example.loginpage.presentation.screens.coming_soon_details.ComingSoonDetails
-import com.example.loginpage.presentation.screens.coming_soon_details.RestaurantDetailsViewModel
 import com.example.loginpage.presentation.screens.login.LoginScreen
 import com.example.loginpage.presentation.screens.login.LoginViewModel
 import com.example.loginpage.presentation.screens.popular_cities_list.PopularCitiesList
@@ -74,21 +72,12 @@ fun AppNavHost(
             route = "${NavigationItem.CityDetails.route}/{productId}",
             arguments = listOf(navArgument("productId") { NavType.IntType })
         ) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getInt("productId") ?: -1
+            val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
             Log.d("NavHost", "CityDetails received index: $productId")
-
-            if (productId != -1) {
-                val detailsViewModel : RestaurantDetailsViewModel = hiltViewModel()
-                detailsViewModel.fetchRestaurantDetails(productId)
-                val productDetails = detailsViewModel.restaurantDetails.collectAsStateWithLifecycle().value
-
                 ComingSoonDetails(
-                    productDetails = productDetails,
+                    productId = productId,
                     onBackClick = { navController.navigateUp()}
                 )
-            } else {
-                Log.e("NavHost", "Invalid city index: $productId")
-            }
         }
 
 

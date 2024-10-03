@@ -17,11 +17,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.loginpage.R
+import com.example.loginpage.data.model.Product
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun PopularCitiesList(
-    onItemClicked : (Int) -> Unit,
+    onItemClicked : (Product) -> Unit,
     uiState : StateFlow<RestaurantsListUiState>
 ) {
 
@@ -50,7 +51,7 @@ fun PopularCitiesList(
                  uiState = item,
                  onItemClicked = {
                      Log.d("PopularCitiesList", "Item clicked with index: $index")
-                     onItemClicked(index)
+                     onItemClicked(item)
                  }
              )
          }

@@ -6,16 +6,14 @@ import com.example.loginpage.data.repository.RestaurantsRepositoryImpl
 import com.example.loginpage.domain.repository.AuthRepository
 import com.example.loginpage.domain.repository.RestaurantsRepository
 import com.example.loginpage.domain.usecase.*
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -39,7 +37,7 @@ object AppModule {
         return Retrofit.Builder()
             .baseUrl("https://android-training.appssquare.com/api/")
             .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
     }
