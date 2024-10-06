@@ -21,7 +21,6 @@ class RestaurantDetailsViewModel @Inject constructor(
 
 
     fun fetchRestaurantDetails(id: Int) {
-        _restaurantDetails.value = DataState.Loading
         viewModelScope.launch {
           getRestaurantDetailsUseCase(id).collect{
               _restaurantDetails.value = it
