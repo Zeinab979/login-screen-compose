@@ -13,8 +13,8 @@ import com.example.loginpage.presentation.screens.StartScreen
 import com.example.loginpage.presentation.screens.coming_soon_details.ComingSoonDetails
 import com.example.loginpage.presentation.screens.login.LoginScreen
 import com.example.loginpage.presentation.screens.login.LoginViewModel
-import com.example.loginpage.presentation.screens.popular_cities_list.PopularCitiesList
-import com.example.loginpage.presentation.screens.popular_cities_list.RestaurantsListViewModel
+import com.example.loginpage.presentation.screens.popular_list.PopularList
+import com.example.loginpage.presentation.screens.popular_list.RestaurantsListViewModel
 import com.example.loginpage.presentation.screens.signUp.SignUpScreen
 import com.example.loginpage.presentation.screens.signUp.SignUpViewModel
 
@@ -61,7 +61,7 @@ fun AppNavHost(
         }
         composable(NavigationItem.PopularCitiesList.route) {
             val restaurantsListViewModel : RestaurantsListViewModel = hiltViewModel()
-            PopularCitiesList(
+            PopularList(
                 uiState = restaurantsListViewModel.listState,
                 onItemClicked = { productId ->
                     navController.navigate("${NavigationItem.CityDetails.route}/$productId")
@@ -72,13 +72,21 @@ fun AppNavHost(
             route = "${NavigationItem.CityDetails.route}/{productId}",
             arguments = listOf(navArgument("productId") { NavType.IntType })
         ) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
-            Log.d("NavHost", "CityDetails received index: $productId")
+            val productId = backStackEntry.arguments?.getInt("productId")
+            val restaurantsListViewModel: RestaurantsListViewModel = hiltViewModel()
+
+            val product = productId?.let { restaurantsListViewModel.getProductById(it) }
+
+            if (product != null) {
                 ComingSoonDetails(
-                    productId = productId,
-                    onBackClick = { navController.navigateUp()}
+                    product = product,
+                    onBackClick = { navController.navigateUp() }
                 )
+            } else {
+                Log.e("NavHost", "Product with ID $productId not found")
+            }
         }
+
 
 
     }

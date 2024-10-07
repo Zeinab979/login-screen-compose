@@ -1,4 +1,4 @@
-package com.example.loginpage.presentation.screens.popular_cities_list
+package com.example.loginpage.presentation.screens.popular_list
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,16 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
-import com.example.loginpage.R
 import com.example.loginpage.data.model.Product
 
 @Composable
@@ -43,12 +40,12 @@ fun ItemDetails(
     ) {
 
         Image(
-            painter = rememberAsyncImagePainter(model = R.drawable.city),
+            painter = rememberAsyncImagePainter(model = uiState.image),
             contentDescription = "city",
             modifier = Modifier
                 .size(210.dp, 177.dp)
                 .shadow(
-                    elevation = 35.dp,
+                    elevation = 10.dp,
                     shape = MaterialTheme.shapes.large,
                     clip = true,
                     spotColor = MaterialTheme.colorScheme.primary,
@@ -72,7 +69,7 @@ fun ItemDetails(
                         color = MaterialTheme.colorScheme.primary
                     )
                 ) {
-                    append("        " + stringResource(uiState.quantity))
+                    append("        $${uiState.price}")
                 }
             },
             modifier = Modifier.padding(start = 15.dp)

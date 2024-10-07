@@ -17,30 +17,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.example.loginpage.R
-import com.example.loginpage.util.DataState
+import com.example.loginpage.data.model.Product
 
 @Composable
 fun ComingSoonDetails(
-    productId: Int?,
-    viewModel: RestaurantDetailsViewModel = hiltViewModel(),
+    product: Product,
     onBackClick: () -> Unit,
 ) {
-    val productDetails by viewModel.restaurantDetails.collectAsStateWithLifecycle()
-   LaunchedEffect(Unit) {
-       if(productId != null){
-           viewModel.fetchRestaurantDetails(productId)
-       }
-   }
+
     Scaffold(
         topBar = {
             ScreenAppBar(onBackClick = onBackClick)
@@ -49,20 +39,16 @@ fun ComingSoonDetails(
             .background(color = MaterialTheme.colorScheme.background)
             .padding(start = 27.dp, end = 27.dp)
     ) {
-        when (val details =productDetails) {
-            is DataState.Loading -> {
-            }
-            is DataState.Success -> {
-                val product = details.data
-                Column(
+
+        Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(it)
                 ) {
                     Image(
-                        painter = rememberAsyncImagePainter(model = product.image),
-                        contentDescription = product.name,
+                        painter = rememberAsyncImagePainter(model =product.image),
+                        contentDescription = null,
                         modifier = Modifier
                             .height(267.dp)
                             .fillMaxWidth()
@@ -72,19 +58,12 @@ fun ComingSoonDetails(
                         style = MaterialTheme.typography.headlineMedium
                     )
                     Text(
-                        text = "Price: ${product.price}",
+                        text = product.price.toString(),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }
-            is DataState.Error -> {
-            }
-
-            DataState.Idle -> {
-            }
-        }
     }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

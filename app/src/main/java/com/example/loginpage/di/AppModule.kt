@@ -61,15 +61,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthUseCase(
-        loginUseCase: LoginUseCase,
-        signUpUseCase: SignUpUseCase
-    ): AuthUseCase {
-        return AuthUseCase(loginUseCase, signUpUseCase)
-    }
-
-    @Provides
-    @Singleton
     fun provideRestaurantsRepository(apiService: ApiService): RestaurantsRepository {
         return RestaurantsRepositoryImpl(apiService)
     }
@@ -80,18 +71,4 @@ object AppModule {
         return ListRestaurantsUseCase(restaurantsRepository)
     }
 
-    @Provides
-    @Singleton
-    fun provideRestaurantDetailsUseCase(restaurantsRepository: RestaurantsRepository): RestaurantDetailsUseCase {
-        return RestaurantDetailsUseCase(restaurantsRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideRestaurantUseCase(
-        listRestaurantsUseCase: ListRestaurantsUseCase,
-        restaurantDetailsUseCase: RestaurantDetailsUseCase
-    ): RestaurantUseCase {
-        return RestaurantUseCase(listRestaurantsUseCase, restaurantDetailsUseCase)
-    }
 }

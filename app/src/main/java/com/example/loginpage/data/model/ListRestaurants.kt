@@ -8,8 +8,7 @@ import kotlinx.serialization.Serializable
 data class ListRestaurants(
     val status: Boolean,
     val message: String,
-    @SerialName("data")
-    val `data`: List<Data>,
+    val data: List<Data>,
     val count: Int
 )
 @Serializable

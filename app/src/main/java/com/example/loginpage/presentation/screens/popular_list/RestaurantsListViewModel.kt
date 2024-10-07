@@ -1,8 +1,8 @@
-package com.example.loginpage.presentation.screens.popular_cities_list
+package com.example.loginpage.presentation.screens.popular_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.loginpage.data.model.ListRestaurants
+import com.example.loginpage.data.model.Product
 import com.example.loginpage.domain.usecase.ListRestaurantsUseCase
 import com.example.loginpage.util.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,31 +17,38 @@ class RestaurantsListViewModel @Inject constructor(
     private val getRestaurantsUseCase: ListRestaurantsUseCase,
 ) : ViewModel() {
 
-    private val _restaurantList: MutableStateFlow<DataState<ListRestaurants>> = MutableStateFlow(DataState.Idle)
     private val _listState = MutableStateFlow(RestaurantsListUiState())
     val listState : StateFlow<RestaurantsListUiState> = _listState
-    init{
+
+    init {
         fetchRestaurants()
     }
+    fun getProductById(id: Int): Product? {
+        return _listState.value.products.find { it.id == id }
+    }
+
     private fun fetchRestaurants() {
-        _restaurantList.value = DataState.Loading
+        _listState.update { it.copy(isLoading = true) }  // Set loading state to true
         viewModelScope.launch {
             getRestaurantsUseCase().collect { response ->
-                _restaurantList.value = response
-                when(response){
+                when(response) {
                     is DataState.Success -> {
                         val products = response.data.data.flatMap { it.products }
-                       _listState.update {
-                            it.copy(products = products)
+                        _listState.update {
+                            it.copy(products = products, isLoading = false, error = null)
                         }
-
                     }
-                    is DataState.Error ->{}
-                    is DataState.Idle -> {}
-                    is DataState.Loading ->{}
+                    is DataState.Error -> {
+                        _listState.update {
+                            it.copy(isLoading = false, error = response.message)
+                        }
+                    }
+                    is DataState.Loading -> {
+                    }
+                    is DataState.Idle -> {
+                    }
                 }
             }
         }
     }
-
 }
