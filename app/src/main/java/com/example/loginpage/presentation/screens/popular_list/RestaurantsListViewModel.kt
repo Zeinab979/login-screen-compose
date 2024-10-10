@@ -1,5 +1,6 @@
 package com.example.loginpage.presentation.screens.popular_list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.loginpage.data.model.Product
@@ -24,11 +25,12 @@ class RestaurantsListViewModel @Inject constructor(
         fetchRestaurants()
     }
     fun getProductById(id: Int): Product? {
+        Log.d("ViewModel", "productId: $id, products: ${_listState.value.products}")
         return _listState.value.products.find { it.id == id }
     }
 
     private fun fetchRestaurants() {
-        _listState.update { it.copy(isLoading = true) }  // Set loading state to true
+        _listState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             getRestaurantsUseCase().collect { response ->
                 when(response) {

@@ -39,6 +39,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
     buildFeatures {
         compose = true
@@ -53,14 +54,15 @@ android {
     }
 }
 dependencies {
+    implementation ("androidx.compose.ui:ui:1.7.3")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.7.3")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -87,10 +89,8 @@ dependencies {
     kapt(libs.androidx.hilt.compiler)
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-   // implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     // Kotlinx Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.okhttp)
@@ -101,7 +101,7 @@ dependencies {
     // GSON
     implementation(libs.converter.gson)
     //coil
-    implementation ("io.coil-kt:coil-compose:2.0.0")
+    implementation ("io.coil-kt:coil-compose:2.4.0")
 
 
 }

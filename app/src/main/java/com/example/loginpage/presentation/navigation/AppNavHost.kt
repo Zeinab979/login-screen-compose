@@ -21,15 +21,14 @@ import com.example.loginpage.presentation.screens.signUp.SignUpViewModel
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = NavigationItem.SplashScreen.route,
 ) {
     val navController = rememberNavController()
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = startDestination
+        startDestination = NavigationItem.StartScreen.route
     ) {
-        composable(NavigationItem.SplashScreen.route) {
+        composable(NavigationItem.StartScreen.route) {
             StartScreen(
                 navigateTo = { navController.navigate(NavigationItem.SignUp.route) }
             )
@@ -40,6 +39,7 @@ fun AppNavHost(
                 onNavigateToLogin = { navController.navigate(NavigationItem.Login.route) },
                 onSignUpSuccess = {
                     signUpViewModel.signUp()
+                    navController.navigate(NavigationItem.PopularList.route)
                 },
                 viewModel = signUpViewModel,
                 uiStateFlow = signUpViewModel.uiState,
@@ -49,7 +49,7 @@ fun AppNavHost(
         composable(NavigationItem.Login.route) {
             val loginViewModel: LoginViewModel = hiltViewModel()
             LoginScreen(
-                onLoginSuccess = { navController.navigate(NavigationItem.PopularCitiesList.route) },
+                onLoginSuccess = { navController.navigate(NavigationItem.PopularList.route) },
                 onNavigateToSignUp = {
                     navController.navigate(NavigationItem.SignUp.route) {
                         navController.navigateUp()                    }
@@ -59,25 +59,27 @@ fun AppNavHost(
                 loginStateFlow = loginViewModel.loginState
             )
         }
-        composable(NavigationItem.PopularCitiesList.route) {
+        composable(NavigationItem.PopularList.route) {
             val restaurantsListViewModel : RestaurantsListViewModel = hiltViewModel()
             PopularList(
                 uiState = restaurantsListViewModel.listState,
-                onItemClicked = { productId ->
-                    navController.navigate("${NavigationItem.CityDetails.route}/$productId")
+                onItemClicked = { product ->
+                    navController.navigate(NavigationItem.Details.createRoute(product.id))
                 }
             )
         }
         composable(
-            route = "${NavigationItem.CityDetails.route}/{productId}",
-            arguments = listOf(navArgument("productId") { NavType.IntType })
-        ) { backStackEntry ->
+            route = "${NavigationItem.Details.route}/{productId}",
+            arguments = listOf(
+                navArgument("productId") { NavType.IntType },
+            )
+        )
+        { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")
             val restaurantsListViewModel: RestaurantsListViewModel = hiltViewModel()
-
-            val product = productId?.let { restaurantsListViewModel.getProductById(it) }
-
-            if (product != null) {
+            if (productId != null) {
+                val product = restaurantsListViewModel.getProductById(productId)
+                if (product != null) {
                 ComingSoonDetails(
                     product = product,
                     onBackClick = { navController.navigateUp() }
@@ -85,11 +87,13 @@ fun AppNavHost(
             } else {
                 Log.e("NavHost", "Product with ID $productId not found")
             }
+            } else {
+                Log.e("NavHost", "productId is null")
+            }
+        }
         }
 
-
-
-    }
 }
+
 
 

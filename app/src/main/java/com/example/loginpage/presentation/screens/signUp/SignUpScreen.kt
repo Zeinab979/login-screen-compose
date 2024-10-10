@@ -193,8 +193,6 @@ fun SignUpScreen(
             onClick = {
                 if ( uiState.password.length >= 6) {
                    onSignUpSuccess()
-                } else {
-                    showDialog = stringResource(R.string.password_length_message)
                 }
             },
             text = R.string.sign_up

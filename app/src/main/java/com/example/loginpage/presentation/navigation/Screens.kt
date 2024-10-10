@@ -1,19 +1,21 @@
 package com.example.loginpage.presentation.navigation
 
 enum class Screens {
-    SplashScreen,
+    StartScreen,
     SignUp,
     Login,
-    PopularCitiesList,
-    CityDetails,
+    PopularList,
+    Details,
 
 }
 
 sealed class NavigationItem(val route: String) {
-    data object SplashScreen : NavigationItem(Screens.SplashScreen.name)
+    data object StartScreen : NavigationItem(Screens.StartScreen.name)
     data object SignUp : NavigationItem(Screens.SignUp.name)
     data object Login : NavigationItem(Screens.Login.name)
-    data object PopularCitiesList : NavigationItem(Screens.PopularCitiesList.name)
-    data object CityDetails : NavigationItem(Screens.CityDetails.name)
+    data object PopularList : NavigationItem(Screens.PopularList.name)
+    data object Details : NavigationItem(Screens.Details.name){
+        fun createRoute(productId: Int): String = "$route/$productId"
+    }
 
 }

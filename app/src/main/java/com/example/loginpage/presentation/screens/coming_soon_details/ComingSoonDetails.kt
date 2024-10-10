@@ -47,7 +47,7 @@ fun ComingSoonDetails(
                         .padding(it)
                 ) {
                     Image(
-                        painter = rememberAsyncImagePainter(model =product.image),
+                        painter = rememberAsyncImagePainter(model = product.image),
                         contentDescription = null,
                         modifier = Modifier
                             .height(267.dp)

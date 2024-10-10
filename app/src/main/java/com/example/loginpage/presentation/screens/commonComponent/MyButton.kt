@@ -16,11 +16,11 @@ import com.example.loginpage.presentation.theme.LoginPageTheme
 
 @Composable
 fun MyButton(
-    onClick: @Composable () -> Unit,
+    onClick: () -> Unit,
     text: Int,
 ) {
     Button(
-        onClick = { onClick },
+        onClick = { onClick() },
         shape = MaterialTheme.shapes.large,
         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
         modifier = Modifier

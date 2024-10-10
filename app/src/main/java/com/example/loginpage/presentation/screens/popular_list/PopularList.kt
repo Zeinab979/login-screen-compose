@@ -1,5 +1,6 @@
 package com.example.loginpage.presentation.screens.popular_list
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,11 +62,12 @@ fun PopularList(
                         )
                     }
                 }
-                itemsIndexed(state.products) { index, item ->
+                itemsIndexed(state.products) { _, product ->
                     ItemDetails(
-                        uiState = item,
+                        uiState = product,
                         onItemClicked = {
-                            onItemClicked(item)
+                            Log.d("PopularList", "Navigating to CityDetails with productId: ${product.id}")
+                            onItemClicked(product)
                         }
                     )
                 }

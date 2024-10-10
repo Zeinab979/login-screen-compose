@@ -1,5 +1,6 @@
 package com.example.loginpage.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,7 @@ import com.example.loginpage.presentation.theme.LoginPageTheme
 fun StartScreen(
     navigateTo: () -> Unit,
 ) {
+    Log.d("StartScreen", "Rendering StartScreen")
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -84,7 +86,9 @@ fun StartScreen(
             )
             MyButton(
                 text = R.string.explore,
-                onClick = { navigateTo() })
+                onClick = {
+                    Log.d("StartScreen", "Button clicked, navigating to next screen")
+                    navigateTo() })
             Spacer(modifier = Modifier.height(30.dp))
 
         }
